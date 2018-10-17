@@ -15,7 +15,12 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "moduleResolution":"Node"
+    "moduleResolution":"Node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
   },
   "filesGlob": [
     "typings/index.d.ts",

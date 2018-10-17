@@ -18,7 +18,8 @@
     "no-underscore-dangle": 0,
     "import/prefer-default-export": 0,
     "react/prop-types": 0,
-    "import/default": "error"
+    "import/default": "error",
+    "import/no-default-export": "error"
   },
   "globals": {
     "__DEV__": false
