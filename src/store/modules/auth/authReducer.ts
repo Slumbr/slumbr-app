@@ -6,6 +6,9 @@ import LogInResult = Google.LogInResult;
 export type AuthAction = ActionType<typeof authActions>;
 
 export interface AuthState {
+  localStorageSlumbrToken?: string;
+  isLocalStorageSlumbrTokenPending: boolean;
+  isLocalStorageSlumbrTokenEmpty?: boolean;
   isGooglePending: boolean;
   isGoogleCancelled: boolean;
   googleError?: Error;
@@ -16,6 +19,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+  isLocalStorageSlumbrTokenPending: false,
   isGooglePending: false,
   isGoogleCancelled: false,
   isSlumbrPending: false
@@ -26,6 +30,19 @@ export const authReducer = (
   action: AuthAction
 ) => {
   switch (action.type) {
+    case getType(authActions.existingToken.request):
+      return {
+        ...state,
+        isLocalStorageSlumbrTokenPending: true
+      } as AuthState;
+    case getType(authActions.existingToken.success):
+      const token = action.payload;
+      return {
+        ...state,
+        isLocalStorageSlumbrTokenPending: false,
+        localStorageSlumbrToken: token,
+        isLocalStorageSlumbrTokenEmpty: !!token
+      } as AuthState;
     case getType(authActions.google.request):
       return {
         ...initialState,

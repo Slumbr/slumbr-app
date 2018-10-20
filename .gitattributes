@@ -1,1 +1,3 @@
 secrets.json filter=git-crypt diff=git-crypt
+secrets.js filter=git-crypt diff=git-crypt
+secrets.ts filter=git-crypt diff=git-crypt

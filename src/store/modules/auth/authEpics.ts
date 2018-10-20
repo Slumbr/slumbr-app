@@ -1,12 +1,41 @@
 import { Services } from "../../../services/servicesRoot";
 import { RootAction, RootState } from "../modulesRoot";
 import { from, of } from "rxjs";
-import { catchError, filter, map, mapTo, switchMap } from "rxjs/operators";
+import { catchError, filter, map, mapTo, switchMap, tap } from "rxjs/operators";
 import { combineEpics, Epic } from "redux-observable";
 import { isActionOf } from "typesafe-actions";
-import { google, googleCancelled, server } from "./authActions";
+import { existingToken, google, googleCancelled, server } from "./authActions";
 import { selectGoogleAuthToken } from "./authSelectors";
+import { EMPTY } from "rxjs";
 
+const loadExistingTokenAndNavigateToAppOrSignIn: Epic<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+> = (
+  action$,
+  _,
+  { auth: { getAuthTokenFromLocalStorage }, navigation: { navigate } }
+) =>
+  action$.pipe(
+    filter(isActionOf(existingToken.request)),
+    switchMap(_ => {
+      console.log("action");
+      return from(getAuthTokenFromLocalStorage()).pipe(
+        map(token => {
+          if (token) {
+            navigate("Main");
+          } else {
+            navigate("Auth");
+          }
+          return existingToken.success(token);
+        })
+      );
+    })
+  );
+
+// TODO could flatten this
 const googleAuthEpic: Epic<RootAction, RootAction, RootState, Services> = (
   action$,
   _,
@@ -14,6 +43,7 @@ const googleAuthEpic: Epic<RootAction, RootAction, RootState, Services> = (
 ) =>
   action$.pipe(
     filter(isActionOf(google.request)),
+    tap(x => console.log("got here", x)),
     switchMap(_ =>
       from(googleLogin()).pipe(
         map(
@@ -61,8 +91,24 @@ const googleServerAuthEpic: Epic<
     })
   );
 
+const navigateToMainAfterSuccessfulLogin: Epic<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+> = (action$, _, { navigation: { navigate } }) =>
+  action$.pipe(
+    filter(isActionOf(server.success)),
+    switchMap(_ => {
+      navigate("Main");
+      return EMPTY;
+    })
+  );
+
 export const authEpics = combineEpics(
+  loadExistingTokenAndNavigateToAppOrSignIn,
   googleAuthEpic,
   checkGoogleTokenWithServerEpic,
-  googleServerAuthEpic
+  googleServerAuthEpic,
+  navigateToMainAfterSuccessfulLogin
 );

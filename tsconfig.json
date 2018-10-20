@@ -3,7 +3,7 @@
     "module":"es2015",
     "target": "es2015",
     "jsx": "react",
-    "rootDir": ".",
+    "rootDir": "src",
     "outDir": "build",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
@@ -16,13 +16,9 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "moduleResolution":"Node",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "strictNullChecks": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "strict": true
   },
-  "filesGlob": [
+  "include": [
     "typings/index.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
@@ -35,9 +31,11 @@
   ],
   "exclude":[
     "build",
+    "App.js",
+    "src/secrets",
     "node_modules",
-    "jest.config.js",
-    "src/App"
+    "__tests__",
+    "jest.config.js"
 
   ],
   "compileOnSave": false

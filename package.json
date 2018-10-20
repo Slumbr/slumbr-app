@@ -8,20 +8,32 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "prettier": "prettier --write App.js src/**/*.js",
-    "lint": "eslint ."
+    "lint": "eslint . && tslint src/**/*.ts",
+    "tsc": "tsc",
+    "assets": "mkdir -p build && cp -R src/assets build",
+    "clean": "rimraf build",
+    "build": "yarn run clean && yarn run assets && yarn run tsc",
+    "watch": "yarn run assets && yarn run tsc -w",
+    "watchAndRunAndroid": "concurrently \"yarn run watch\" \"yarn run android\"",
+    "buildRunAndroid": "yarn run build && yarn run watchAndRunAndroid ",
+    "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run ios\"",
+    "buildRunIOS": "yarn run build && yarn run watchAndRunIOS ",
+    "watchAndStart": "concurrently \"yarn run watch\" \"yarn run start\"",
+    "buildAndStart": "yarn run build && yarn run watchAndStart "
   },
   "jest": {
     "preset": "jest-expo"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm lint"
+      "pre-commit": "yarn lint"
     }
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
     "@types/react-redux": "^6.0.9",
     "@types/reselect": "^2.2.0",
+    "babel-preset-env": "^1.7.0",
     "expo": "^30.0.1",
     "prop-types": "latest",
     "react": "16.3.1",
@@ -29,6 +41,7 @@
     "react-navigation": "^2.16.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
     "redux-observable": "^1.0.0",
     "reselect": "^4.0.0",
     "typesafe-actions": "^2.0.4"
@@ -40,7 +53,9 @@
     "@types/react": "16.4.16",
     "@types/react-dom": "^16.0.9",
     "@types/react-native": "0.57.4",
+    "@types/react-navigation": "^2.0.24",
     "@types/react-test-renderer": "^16.0.3",
+    "@types/redux-logger": "^3.0.6",
     "babel-eslint": "^10.0.1",
     "concurrently": "^4.0.1",
     "eslint": "^5.7.0",
@@ -51,12 +66,14 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
+    "idb-keyval": "^3.1.0",
     "jest-expo": "30.0.0",
     "prettier": "^1.14.3",
     "react-test-renderer": "^16.5.2",
     "rimraf": "^2.6.2",
     "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.2"
+    "typescript": "^3.1.2",
+    "typescript-eslint-parser": "^20.0.0"
   }
 }

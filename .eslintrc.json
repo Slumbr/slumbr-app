@@ -23,5 +23,13 @@
   },
   "globals": {
     "__DEV__": false
+  },
+  "settings": {
+    "import/parsers": {
+      "typescript-eslint-parser": [
+        ".ts",
+        ".tsx"
+      ]
+    }
   }
 }
