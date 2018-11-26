@@ -1,11 +1,13 @@
-import { Google } from "expo";
+import { AuthSession } from "expo";
 
 import { googleOAuth } from "../../secrets";
-import LogInResult = Google.LogInResult;
+// import LogInResult = Google.LogInResult;
 import { get, set } from "../localStorage/localStorageService";
 
-export const googleLogin = async (): Promise<LogInResult> => {
+export const googleLogin = async (): Promise<AuthSession.StartAsyncResponse | null> => {
   console.log("googleOAuth", googleOAuth);
+
+  const GOOGLE_WEB_APP_ID = googleOAuth.androidClientId;
 
   // return {
   //   type: "success",
@@ -18,10 +20,30 @@ export const googleLogin = async (): Promise<LogInResult> => {
   //   }
   // };
 
-  return Google.logInAsync({
-    ...googleOAuth,
-    scopes: ["profile", "email"]
+  let redirectUrl = AuthSession.getRedirectUrl();
+  console.log("rediectUrl", redirectUrl);
+  const response = await AuthSession.startAsync({
+    authUrl:
+      `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `&client_id=${GOOGLE_WEB_APP_ID}` +
+      `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
+      `&response_type=code` +
+      `&access_type=offline` +
+      `&prompt=consent` +
+      `&scope=${encodeURIComponent(
+        "https://www.googleapis.com/auth/plus.profile.emails.read"
+      )}`
   });
+
+  console.log("response", response);
+
+  return null;
+
+  //
+  // return Google.logInAsync({
+  //   ...googleOAuth,
+  //   scopes: ["profile", "email"]
+  // });
 };
 
 export const checkGoogleToken = async (googleToken: string) => {

@@ -32,7 +32,7 @@
   "exclude":[
     "build",
     "App.js",
-    "src/secrets",
+    "src/app/secrets",
     "node_modules",
     "__tests__",
     "jest.config.js"

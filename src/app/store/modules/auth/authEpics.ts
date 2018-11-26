@@ -47,10 +47,10 @@ const googleAuthEpic: Epic<RootAction, RootAction, RootState, Services> = (
     switchMap(_ =>
       from(googleLogin()).pipe(
         map(
-          result =>
-            result.type === "cancel"
-              ? googleCancelled()
-              : google.success(result)
+          _ => googleCancelled()
+          // result.type === "cancel"
+          //   ? googleCancelled()
+          //   : google.success(result)
         ),
         catchError(error => of(google.failure(error)))
       )

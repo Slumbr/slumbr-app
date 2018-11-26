@@ -10,7 +10,7 @@
     "prettier": "prettier --write App.js src/**/*.js",
     "lint": "eslint . && tslint src/**/*.ts",
     "tsc": "tsc",
-    "assets": "mkdir -p build && cp -R src/assets build",
+    "assets": "mkdir -p build && cp -R src/app/assets build/app",
     "clean": "rimraf build",
     "build": "yarn run clean && yarn run assets && yarn run tsc",
     "watch": "yarn run assets && yarn run tsc -w",
